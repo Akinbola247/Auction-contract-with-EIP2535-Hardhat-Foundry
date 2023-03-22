@@ -78,12 +78,19 @@ function withdraw(uint auctionID__) public {
         _idm_.status = false;
         address contractaddr = _idm_.contractAddress;
         uint nftID = _idm_.tokenID;
-        IERC721(contractaddr).transferFrom(address(this), _highestBidder_, nftID);
+        address _seller = getSeller(auctionIDm__);
+        if(_highestBidder_ == address(0)){
+            IERC721(contractaddr).transferFrom(address(this), _seller, nftID);
+        }else {
+            IERC721(contractaddr).transferFrom(address(this), _highestBidder_, nftID);
+        }
+        
     }
 
     function cashOut(uint _itemMarketID) public  {
         ItemsToAuction storage _idm_ = ds.TobeAuctioned[_itemMarketID];
         uint balance = _idm_.highestBid;
+        require(balance != 0, "No bid");
         require(_idm_.status == false, "Auction still active");
         address _seller = getSeller(_itemMarketID);
         require(msg.sender == _seller, "Not Authorized");

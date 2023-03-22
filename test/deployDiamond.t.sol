@@ -71,6 +71,10 @@ contract DiamondDeployer is Test, IDiamondCut {
         IAuction(address(diamond)).CreateAuction{value: 0.0065 ether}(address(nftF), 0, 1 ether);
        IAuction(address(diamond)).startBidding(1);
        vm.stopPrank();
+    }
+
+    function testBid() public {
+        testDeployDiamond();
         vm.startPrank(address(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC));
         vm.deal(address(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC), 5 ether);  
        IAuction(address(diamond)).bid{value: 2 ether}(1);
@@ -79,6 +83,9 @@ contract DiamondDeployer is Test, IDiamondCut {
         vm.deal(address(0xa0Ee7A142d267C1f36714E4a8F75612F20a79720), 9 ether);
        IAuction(address(diamond)).bid{value: 3 ether}(1);
         vm.stopPrank();
+    }
+    function testSettleBid() public {
+        testBid();
         IAuction(address(diamond)).getSeller(1);
         uint balance = address(diamond).balance;
         console.log(balance); 
@@ -86,7 +93,11 @@ contract DiamondDeployer is Test, IDiamondCut {
         vm.deal(0xFa027a58eF89d124CA94418CE5403C29Af2D7459, 5 ether);   
         IAuction(address(diamond)).settleBid(1);
       vm.stopPrank();
-        vm.startPrank(address(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC));
+    }
+
+    function testWithdraw() public {
+        testSettleBid();
+         vm.startPrank(address(0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC));
        IAuction(address(diamond)).withdraw(1);       
         vm.stopPrank();
         
@@ -97,7 +108,6 @@ contract DiamondDeployer is Test, IDiamondCut {
          uint balance2 = address(diamond).balance;
         console.log(balance2);
         vm.stopPrank();
-  
     }
 
     function generateSelectors(string memory _facetName)
