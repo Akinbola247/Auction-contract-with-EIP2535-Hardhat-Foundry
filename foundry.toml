@@ -1,4 +1,4 @@
-[default]
+[profile.default]
 src = 'contracts'
 out = 'out'
 libs = [
@@ -6,5 +6,12 @@ libs = [
 ]
 ffi=true
 verbosity=5
+
+[rpc_endpoints]
+sepolia = "${SEPOLIA_RPC_URL}"
+
+[etherscan]
+goerli = { key = "${ETHERSCAN_API_KEY}" }
+
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config

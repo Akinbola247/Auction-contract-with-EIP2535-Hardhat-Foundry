@@ -1,3 +1,4 @@
+.env
 out
 artifacts
 node_modules
